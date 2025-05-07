@@ -126,3 +126,5 @@ https://dontpad.com/ifal-20250430
   ```
     node server.js
   ```
+
+  Deve-se receber a mensagem de conexão ok. Caso não verificar a mansagem de erro e as configurações de banco.
