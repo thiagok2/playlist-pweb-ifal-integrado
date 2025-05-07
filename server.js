@@ -11,8 +11,9 @@ import { sequelize, Usuario, Filme, Canal, CanalFilme, Playlist, Comentario } fr
 
     // Exemplo de uso:
     const novoUsuario = await Usuario.create({
-      login: 'gabriel4.ribeiro',
-      nome: 'Gabriel3 Ribeiro',
+      login: 'thiago.oliveira',
+      nome: 'Thiago Oliveira',
+      email: 'thiago.oliveira@ifal.edu.br'
     });
 
     const usuarios = await Usuario.findAll();

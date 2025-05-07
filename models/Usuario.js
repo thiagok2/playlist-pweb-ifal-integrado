@@ -19,6 +19,9 @@ export default (sequelize) => {
     data_nascimento: {
       type: DataTypes.DATEONLY
     },
+    email: {
+      type: DataTypes.STRING(100)
+    }
   }, {
     tableName: 'usuarios',
     timestamps: false,
