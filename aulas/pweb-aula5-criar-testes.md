@@ -1,4 +1,11 @@
 # Testes
+
+# Criando model mensalidade
+
+1. Criar arquivo models/Mensalidade.js
+
+2. Atualizar arquivo models/Index.js
+
 # Testes
 
 1. Instalar pacotes
@@ -20,6 +27,45 @@
     1. Criar banco playlist_test no postgresql
 
     2. Atualizar config/database.js criando variaveis para os ambientes
+    ```js
+      import { Sequelize } from 'sequelize';
+      import dotenv from 'dotenv';
+
+      dotenv.config(); // Carrega as variáveis de ambiente
+
+      const env = process.env.NODE_ENV || 'development';
+      const config = {
+        development: {
+          database: process.env.DB_NAME,
+          username: process.env.DB_USER,
+          password: process.env.DB_PASSWORD,
+          host: process.env.DB_HOST,
+          port: process.env.DB_PORT,
+          dialect: 'postgres',
+        },
+        test: {
+          database: 'playlist_test',
+          username: process.env.DB_USER,
+          password: process.env.DB_PASSWORD,
+          host: process.env.DB_HOST,
+          port: process.env.DB_PORT,
+          dialect: 'postgres',
+          logging: false,
+        },
+        production: {
+          database: process.env.DB_NAME,
+          username: process.env.DB_USER,
+          password: process.env.DB_PASSWORD,
+          host: process.env.DB_HOST,
+          port: process.env.DB_PORT,
+          dialect: 'postgres',
+        },
+      };
+
+      const sequelize = new Sequelize(config[env]);
+
+      export default sequelize;
+    ```
 
     3. Criar a pasta tests
 
@@ -27,9 +73,55 @@
 
         tests/setup.js
 
-        tests/setup.test.js
+        ```js
+        import * as models from '../models/Index.js';
+        import sequelize from '../config/database.js';
 
-    5. Configurando package.json, para npm start, npm test
+        const db = { ...models }; // Copia os modelos diretamente
+
+        // Sincroniza o banco antes dos testes
+        before(async () => {
+          await sequelize.sync({ force: true }); // Recria as tabelas
+        });
+
+        // Limpa todas as tabelas após cada teste
+        afterEach(async () => {
+          await sequelize.truncate({ cascade: true, restartIdentity: true });
+        });
+
+        // Fecha a conexão após todos os testes
+        after(async () => {
+          await sequelize.close();
+        });
+
+        export { sequelize, db };
+        ```
+
+        Criar tests/setup.test.js
+        ```js
+          import { expect } from 'chai';
+          import { sequelize, db } from './setup.js';
+
+          describe('Configuração do Ambiente de Testes', () => {
+            it('Deve conectar ao banco PostgreSQL', async () => {
+              await sequelize.authenticate();
+              expect(sequelize.config.database).to.equal('playlist_test');
+            });
+
+            it('Deve criar um usuário no banco PostgreSQL', async () => {
+              const usuario = await db.Usuario.create({
+                login: 'teste123',
+                nome: 'Usuário Teste',
+              });
+
+              expect(usuario).to.have.property('id');
+              expect(usuario.login).to.equal('teste123');
+              expect(usuario.nome).to.equal('Usuário Teste');
+            });
+          });
+        ```
+
+    5. Configurando *package.json*, para npm start, npm test
 
         ```json
 
