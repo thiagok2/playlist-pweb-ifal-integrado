@@ -5,7 +5,9 @@ import CanalModel from './Canal.js';
 import CanalFilmeModel from './CanalFilme.js';
 import PlaylistModel from './Playlist.js';
 import ComentarioModel from './Comentario.js';
+import MensalidadeModel from './Mensalidade.js';
 
+const Mensalidade = MensalidadeModel(sequelize);
 const Usuario = UsuarioModel(sequelize);
 const Filme = FilmeModel(sequelize);
 const Canal = CanalModel(sequelize);
@@ -38,6 +40,9 @@ Comentario.belongsTo(Usuario, { foreignKey: 'id_usuario' });
 Filme.hasMany(Comentario, { foreignKey: 'id_filme' });
 Comentario.belongsTo(Filme, { foreignKey: 'id_filme' });
 
+Usuario.hasMany(Mensalidade, { foreignKey: 'id_usuario' });
+Mensalidade.belongsTo(Usuario, { foreignKey: 'id_usuario' });
+
 export {
   sequelize,
   Usuario,
@@ -45,5 +50,6 @@ export {
   Canal,
   CanalFilme,
   Playlist,
-  Comentario
+  Comentario,
+  Mensalidade
 };
