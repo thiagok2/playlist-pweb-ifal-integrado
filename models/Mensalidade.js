@@ -38,8 +38,8 @@ export default (sequelize) =>
           if (mes < 1 || mes > 12) {
             throw new Error('Mês deve estar entre 01 e 12');
           }
-          if (ano < 1900 || ano > 9999) {
-            throw new Error('Ano deve estar entre 1900 e 9999');
+          if (ano < 2000 || ano > 9999) {
+            throw new Error('Ano deve estar entre 2000 e 9999');
           }
         },
       },

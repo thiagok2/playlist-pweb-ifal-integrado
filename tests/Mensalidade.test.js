@@ -104,7 +104,7 @@ describe('Mensalidade Model', () => {
       expect.fail('Deveria ter lançado um erro de validação');
     } catch (error) {
       expect(error.name).to.equal('SequelizeValidationError');
-      expect(error.message).to.include('Ano deve estar entre 1900 e 9999');
+      expect(error.message).to.include('Ano deve estar entre 2000 e 9999');
     }
   });
 

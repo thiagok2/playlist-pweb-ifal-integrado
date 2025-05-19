@@ -18,10 +18,23 @@ export default (sequelize) => {
     texto: {
       type: DataTypes.TEXT,
       allowNull: false,
+      validate: {
+        len: {
+          args: [1, 500],
+          msg: 'O comentário deve ter no máximo 500 caracteres.',
+        },
+      }
     },
     data_comentario: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
+      validate: {
+        isNotFuture(value) {
+          if (value && new Date(value) > new Date()) {
+            throw new Error('A data do comentário não pode ser no futuro.');
+          }
+        },
+      }
     },
     avaliacao: {
       type: DataTypes.DECIMAL(10, 2),
