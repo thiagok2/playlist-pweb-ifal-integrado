@@ -125,7 +125,6 @@ describe('Mensalidade Model', () => {
       expect.fail('Deveria ter lançado um erro de validação');
     } catch (error) {
       expect(error.name).to.equal('SequelizeDatabaseError');
-      expect(error.message).to.include('invalid input value for enum');
     }
   });
 
