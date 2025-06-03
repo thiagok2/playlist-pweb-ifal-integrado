@@ -1,26 +1,37 @@
 // server.js (ou outro nome que você preferir)
-import { sequelize, Usuario, Filme, Canal, CanalFilme, Playlist, Comentario } from './models/Index.js';
+import express from 'express';
+import bodyParser from 'body-parser';
+import sequelize from './config/database.js';
 
-(async () => {
-  try {
-    await sequelize.authenticate();
-    console.log('✅ Conexão com o banco de dados estabelecida com sucesso.');
 
-    await sequelize.sync({ alter: true }); // Isso agora criará TODAS as tabelas com base em todos os modelos importados e relacionados
-    console.log('✅ Tabelas sincronizadas com sucesso.');
+import usuarioRoutes from './routes/UsuariosRouters.js';
+import filmeRoutes from './routes/FilmesRouters.js';
+import canalRoutes from './routes/CanaisRouters.js';
+import summaryRouters from './routes/SummaryRouters.js';
+// import playlistRoutes from './routes/PlaylistsRouters.js';
 
-    // Exemplo de uso:
-    const novoUsuario = await Usuario.create({
-      login: 'thiago3.oliveira',
-      nome: 'Thiago3 Oliveira',
-      email: 'thiago3soliveira@ifal.edu.br'
-    });
+const app = express();
+const port = process.env.PORT || 3000;
 
-    const usuarios = await Usuario.findAll();
-    console.log(`Total de usuários: ${usuarios.length}`);
-  } catch (error) {
-    console.error('❌ Erro ao conectar ou sincronizar o banco de dados:', error);
-  } finally {
-    await sequelize.close();
-  }
-})();
+app.use(bodyParser.json());
+
+app.get('/version', (req, res) => {
+  res.json({ status: 'ok', version: '1.0.1' });
+});
+
+app.use('/usuarios', usuarioRoutes);
+app.use('/filmes', filmeRoutes);
+app.use('/canais', canalRoutes);
+app.use('/summary', summaryRouters);
+
+
+
+sequelize.sync({ alter: true }).then(() => {
+  console.log('Database ok');
+  app.listen(port, () => {
+    console.log(`Server ok port ${port}`);
+  });
+})
+.catch((error) => {
+  console.error('Erro ao conectar:', error);
+});

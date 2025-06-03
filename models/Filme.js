@@ -1,4 +1,4 @@
-import { DataTypes } from 'sequelize';
+import { DataTypes, Sequelize } from 'sequelize';
 
 export default (sequelize) => {
   const Filme = sequelize.define('Filme', {
@@ -30,6 +30,12 @@ export default (sequelize) => {
         max: 10,
       },
     },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: Sequelize.NOW,
+    }
+    
   }, {
     tableName: 'filmes',
     timestamps: false,
