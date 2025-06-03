@@ -14,7 +14,7 @@ const Filme = FilmeModel(sequelize);
 const Canal = CanalModel(sequelize);
 const CanalFilme = CanalFilmeModel(sequelize);
 const Playlist = PlaylistModel(sequelize);
-const PlaylistFilmeModel = PlaylistFilmeModel(sequelize);
+const PlaylistFilme = PlaylistFilmeModel(sequelize);
 const Comentario = ComentarioModel(sequelize);
 
 // RELACIONAMENTOS
