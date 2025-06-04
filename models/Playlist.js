@@ -1,4 +1,4 @@
-import { DataTypes } from 'sequelize';
+import { DataTypes, Sequelize } from 'sequelize';
 
 export default (sequelize) => {
   const Playlist = sequelize.define('Playlist', {
@@ -16,6 +16,7 @@ export default (sequelize) => {
     },
     data_criacao: {
       type: DataTypes.DATE,
+      default: Sequelize.NOW
     },
   }, {
     tableName: 'playlists',
