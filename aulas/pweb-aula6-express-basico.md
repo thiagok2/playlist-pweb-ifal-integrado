@@ -69,14 +69,22 @@ E tudo deve estar ok. Se não estiver... corrigir!
 
 ## Criando primeira rota
 Criar um arquivo routes/UsuariosRouters.js
+Obs.: Lembre-se de descomentar os trechos no server.js que se referem as rotas de usuário.
+
+```js
+import usuarioRoutes from './routes/UsuariosRouters.js';
+...
+
+app.use('/usuarios', usuarioRoutes);
+```
 
 ```js
 
 import express from 'express';
-import { Usuario } from '../models/index.js';
+import { Usuario } from '../models/Index.js';
 const router = express.Router();
 
-//Rotas vão aqui!
+//Rotas vão aqui! Vamos implementar daqui a pouco
 
 export default router;
 
@@ -93,13 +101,14 @@ router.get('/', async (_req, res) => {
 
 Lembrar de descomentar os trechos referentes a lógica das rotas do UsuarioRouter.js
 
-Testar no Postman
+TESTAR no navegador ou no Postman
 
 ```
 GET http://localhost:3000/usuarios
 ```
 
-2. Criando as primeiras rotas adicionado o conteúdo das rotas:
+1. Criando a primeira rota que salva no banco usando sequelize:
+Adicionar naquele trecho onde está o comentário //Rotas vão aqui!
 
 ```js
 router.post('/', async (_req, res) => {
@@ -107,7 +116,7 @@ router.post('/', async (_req, res) => {
   res.json(usuario);
 });
 ```
-TESTAR
+TESTAR no navegador ou no Postman
 
 POST http://localhost:3000/usuarios
 {
