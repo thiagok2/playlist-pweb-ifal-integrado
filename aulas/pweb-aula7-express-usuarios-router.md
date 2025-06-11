@@ -38,7 +38,7 @@ Este guia foca no arquivo `routes/UsuariosRouters.js`.
 
 ## Configurar arquivo server.js
 
-No arquivo server.js acrescentar o imports:
+No arquivo server.js acrescentar novos imports:
 ```js
 import usuarioRoutes from './routes/UsuariosRouters.js';
 import filmeRoutes from './routes/FilmesRouters.js';
@@ -75,6 +75,11 @@ No topo do arquivo definir os imports
 import express from 'express';
 import { Usuario } from '../models/Index.js';
 import { Op }  from 'sequelize';
+```
+
+No topo final do arquivo, escrever
+```js
+export default router;
 ```
 
 ### 2. Instanciar objeto router
