@@ -5,6 +5,7 @@ import { Op }  from 'sequelize';
 const router = express.Router();
 
 router.get('/search', async (req, res) => {
+  console.log('search')
   const { q } = req.query;
   if (!q) {
     return res.status(400).json({ error: 'Parâmetro "q" é obrigatório' });
@@ -26,6 +27,7 @@ router.get('/search', async (req, res) => {
     res.status(500).json({ error: 'Error na busca', details: err });
   }
 });
+
 
 router.get('/buscar-por-email-ou-login', async (req, res) => {
   const { q } = req.query;
@@ -55,6 +57,7 @@ router.get('/buscar-por-email-ou-login', async (req, res) => {
 });
 
 router.get('/', async (req, res) => {
+  console.log('get/')
   try {
     const usuarios = await Usuario.findAll();
     res.json(usuarios);
@@ -65,6 +68,7 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
+  console.log('get/:id');
   try {
     const {id} = req.params;
     const usuario = await Usuario.findByPk(id);

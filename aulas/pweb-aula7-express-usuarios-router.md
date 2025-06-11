@@ -35,6 +35,24 @@ Este guia foca no arquivo `routes/UsuariosRouters.js`.
 
 ---
 
+
+## Configurar arquivo server.js
+
+No arquivo server.js acrescentar o imports:
+```js
+import usuarioRoutes from './routes/UsuariosRouters.js';
+import filmeRoutes from './routes/FilmesRouters.js';
+...
+const app = express();
+...
+app.use('/usuarios', usuarioRoutes);
+app.use('/filmes', filmeRoutes);
+...
+
+
+
+```
+
 ## Implementação das Rotas
 
 As rotas implementadas no arquivo `UsuariosRouters.js` são:
@@ -48,6 +66,23 @@ As rotas implementadas no arquivo `UsuariosRouters.js` são:
 7. `GET /buscar-por-email-ou-login` - Buscar um usuário por email ou login.
 
 ---
+
+### 0. Definir imports
+
+No topo do arquivo definir os imports
+
+```js
+import express from 'express';
+import { Usuario } from '../models/Index.js';
+import { Op }  from 'sequelize';
+```
+
+### 2. Instanciar objeto router
+``` js
+
+const router = express.Router();
+
+```
 
 ### 1. Listar Todos os Usuários (`GET /`)
 
@@ -259,6 +294,12 @@ router.delete('/:id', async (req, res) => {
 ### 6. Buscar Usuários por Nome, Login ou Email (`GET /search`)
 
 **Objetivo**: Realizar uma busca flexível por usuários com base em um termo de pesquisa que pode corresponder ao `nome`, `login` ou `email`.
+
+
+#### Importante: Onde colocar nos métodos novos
+  Obs.: As próximas rotas devem ser criadas no topo do arquivo para que as elas não fiquem escondidas e sejam interpretadas
+  no get/:id. 
+
 
 **Código**:
 ```js
