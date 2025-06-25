@@ -2,7 +2,9 @@
 CREATE TABLE usuarios (
     id SERIAL PRIMARY KEY,
     login VARCHAR(50) NOT NULL UNIQUE,
-    nome VARCHAR(100) NOT NULL
+    nome VARCHAR(100) NOT NULL,
+    data_nascimento DATE,
+    email VARCHAR(100)
 );
 
 CREATE TABLE filmes (
@@ -167,10 +169,3 @@ INSERT INTO comentarios (id_usuario, id_filme, texto, avaliacao) VALUES
 (2, 16, 'Uncharted tem seus momentos, mas é só isso. Nada excepcional.', 7.1),
 (3, 1, 'Avatar redefine o que é cinema. Maravilhoso.', 9.9),
 (4, 5, 'Sem Volta para Casa é pura magia e emoção.', 9.8);
-
-
-
-
-
-
-
