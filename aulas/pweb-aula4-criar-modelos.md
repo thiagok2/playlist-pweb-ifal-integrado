@@ -9,7 +9,7 @@ Tendo eu uma pasta models, analise o arquivo sql anexado e vamos criar todos os 
 ---------
 
 Veja como ele vai ficar a organização.
-
+```
 seu-projeto-playlist/
 ├── config/
 │   └── database.js
@@ -26,6 +26,7 @@ seu-projeto-playlist/
 ├── .env
 ├── server.js
 └── package.json
+````
 
 **Usuário**
 O primeiro model a ser criado é o de usuário. Primeiro passo é criar o arquivo Usuario.js colocar a linha import.
