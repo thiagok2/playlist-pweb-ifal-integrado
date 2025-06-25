@@ -2,6 +2,8 @@ https://dontpad.com/ifal-20250430
 
 # Tutorial playlist
 
+
+# Criar banco de dados no postgresql com o nome playlist
 ## Configuração do projeto
 1. Criar pasta localmente pweb2-playlist
 2. Abrir pasta dentro VSC;
@@ -73,15 +75,19 @@ https://dontpad.com/ifal-20250430
     ```
 
 ## Criar pastas para organização na raiz do projeto
-  aulas
-  config
-  models
-  tests
+  * aulas
+  * config
+  * models
+  * tests
+  * data
+  * routes
   
 
 ## Criar config/database.js para configurar o acesso ao banco
   1. Dentro da pasta config criar *database.js*
+    
     ```js
+
     import { Sequelize } from 'sequelize';
     import dotenv from 'dotenv'
 
