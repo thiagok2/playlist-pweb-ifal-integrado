@@ -51,6 +51,8 @@ export default (sequelize) => {
   const Usuario = sequelize.define('Usuario', {
     //aqui serão definidas as colunas dessa model referenciando a tabela
   });
+
+  return Usuario;
 }
 ```
 
