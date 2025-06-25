@@ -30,7 +30,7 @@ seu-projeto-playlist/
 
 Um exemplo de model:
 
-models/Usuarios.js
+models/Usuario.js
 
 ```js
 	import { DataTypes } from 'sequelize';
@@ -64,6 +64,58 @@ export default (sequelize) => {
 
   return Usuario;
 };
+```
+
+
+Vamos ao exemplo de filme a seguir. Observe que além dos novos tipo, como o DECIMAL(10,2), novos atributos como defaultValue e validade(min, max). O sequelize tem uma série de recursos e vale muito a pena se apronfundar sobre os recursos sequelize.
+
+```js
+import { DataTypes, Sequelize } from 'sequelize';
+
+export default (sequelize) => {
+  const Filme = sequelize.define('Filme', {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    titulo: {
+      type: DataTypes.STRING(200),
+      allowNull: false,
+    },
+    genero: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+    },
+    duracao: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    ano_lancamento: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    nota_avaliacao: {
+      type: DataTypes.DECIMAL(10, 2),
+      validate: {
+        min: 0,
+        max: 10,
+      },
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: Sequelize.NOW,
+    }
+    
+  }, {
+    tableName: 'filmes',
+    timestamps: false,
+  });
+
+  return Filme;
+};
+
 ```
 
 
