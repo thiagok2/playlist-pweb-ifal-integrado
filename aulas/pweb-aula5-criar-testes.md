@@ -1,24 +1,27 @@
 # Testes
 
 1. Instalar pacotes
-  
-  ```json
-    "chai": "^5.2.0",
-    "mocha": "^11.1.0",
-    "sequelize-test-helpers": "^1.4.3",
-    "sinon": "^20.0.0"
-  ```
   Comando a executar
+
     ```
         npm install chai mocha sequelize-test-helpers sinon
 
     ```
 
+    Essas linhas seram inseridas no seu package.json
+     ```json
+        "chai": "^5.2.0",
+        "mocha": "^11.1.0",
+        "sequelize-test-helpers": "^1.4.3",
+        "sinon": "^20.0.0"
+     ```
+
 2. Criar configuração de banco e pasta
 
-    1. Criar banco playlist_test no postgresql
+    1. Criar banco playlist_test no postgresql/pgadmin
 
     2. Atualizar config/database.js criando variaveis para os ambientes
+
     ```js
       import { Sequelize } from 'sequelize';
       import dotenv from 'dotenv';
@@ -89,7 +92,10 @@
         export { sequelize, db };
         ```
 
+        **Novo arquivo setup -  um teste simples apenas para verificar**
+
         Criar tests/setup.test.js
+
         ```js
           import { expect } from 'chai';
           import { sequelize, db } from './setup.js';
@@ -184,7 +190,10 @@
     });
   ```
 
-  Comentario.test.js
+  **Comentario.test.js**
+
+
+
   ```js
   import { expect } from 'chai';
   import { sequelize, db } from './setup.js';

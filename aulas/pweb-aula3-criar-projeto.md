@@ -17,7 +17,7 @@ https://dontpad.com/ifal-20250430
 1. Instalar dependências
    
     ```
-      npm install pg dotenv sequelize express
+      npm install pg dotenv sequelize express cross-env
     ```
 
 1. (NOVO) Atualizar package.json inserindo "type": "module". Conteúdo:
@@ -134,3 +134,44 @@ https://dontpad.com/ifal-20250430
   ```
 
   Deve-se receber a mensagem de conexão ok. Caso não verificar a mansagem de erro e as configurações de banco.
+
+  ## Confirar o package.json
+
+  É muito interessante configurar o package.json para executar com npm start. Para tal, uma ferramenta interessante é instalar o nodemon. Isso se faz com o comando.
+
+  ```
+    sudo npm install -g nodemon
+  ```
+  Vamos instalar 
+
+Feito isso é configurar o package.json
+
+  A adição importante é:
+  ```js
+  "scripts": {
+    "start": "npx nodemon server.js",
+  
+  },
+  ```
+
+  ```json
+  {
+  "name": "pweb",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "npx nodemon server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "pg": "^8.14.1",
+    "sequelize": "^6.37.7"
+  }
+}
+
+  ```
