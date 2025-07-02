@@ -24,10 +24,10 @@ app.use('/filmes', filmeRoutes);
 app.use('/canais', canalRoutes);
 app.use('/summary', summaryRouters);
 
-
+console.log('ola123');
 
 sequelize.sync({ alter: true }).then(() => {
-  console.log('Database ok');
+  console.log('Database ok1235555');
   app.listen(port, () => {
     console.log(`Server ok port ${port}`);
   });

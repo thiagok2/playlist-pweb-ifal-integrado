@@ -142,7 +142,7 @@ https://dontpad.com/ifal-20250430
   ```
     sudo npm install -g nodemon
   ```
-  Vamos instalar 
+  Vamos instalar. Ele faz com que qualquer atualização no código o projeto mesmo em execução se atualize automaticamente.
 
 Feito isso é configurar o package.json
 

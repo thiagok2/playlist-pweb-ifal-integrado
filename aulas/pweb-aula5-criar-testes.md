@@ -124,15 +124,17 @@
         ```json
 
               "scripts": {
-
-                    "start": "node index.js",
-
-                    "test": "NODE_ENV=test mocha tests/**/*.test.js --exit"
-
-                },
-
+                "start": "npx nodemon server.js",
+                "test": "cross-env NODE_ENV=test mocha tests/**/*.test.js --exit"
+              },
         ```
 
+  Caso o cross-env não esteja no seu package.jso, se faz necessário instalar com:
+    
+    ```
+      npm install cross-env
+    ```
+  O cross-env é necessário para carregar variáveis do ambiente ao rodar o projeto no SO windows.
     6. Criar arquivos testes, por exemplo Canal.test.js
    
   ```js
