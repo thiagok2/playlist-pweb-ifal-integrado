@@ -1,6 +1,12 @@
 # Testes
 
-1. Instalar pacotes
+0. Roteiro
+  1. Instalar pacotes
+  2. Criar configuração de banco e pasta
+  3. Criar testes
+  4. Executar testes
+
+1. ## Instalar pacotes
   Comando a executar
 
     ```
@@ -16,7 +22,7 @@
         "sinon": "^20.0.0"
      ```
 
-2. Criar configuração de banco e pasta
+2. ## Criar configuração de banco e pasta
 
     1. Criar banco playlist_test no postgresql/pgadmin
 
@@ -92,7 +98,7 @@
         export { sequelize, db };
         ```
 
-        **Novo arquivo setup -  um teste simples apenas para verificar**
+        **Novo arquivo setup.test.js -  um teste simples apenas para verificar se o setup está OK**
 
         Criar tests/setup.test.js
 
@@ -119,7 +125,109 @@
           });
         ```
 
-    5. Configurando *package.json*, para npm start, npm test
+    Obs.: O trecho de código acima:
+
+# 🧪 Estrutura dos Testes com Mocha, Chai e Sequelize
+
+Este projeto utiliza **Mocha** como framework de testes e **Chai** como biblioteca de asserções. Os testes são aplicados diretamente sobre a conexão com o banco de dados PostgreSQL e sobre o funcionamento das operações via Sequelize ORM.
+
+## 🔍 `describe()`: Agrupamento Lógico dos Testes
+
+A função `describe()` é usada para **organizar e agrupar casos de teste relacionados** sob um mesmo contexto ou funcionalidade. Ela recebe dois argumentos:
+
+- Uma string descritiva, que explica o que está sendo testado;
+- Uma função contendo os blocos de teste `it()` relacionados.
+
+**Exemplo:**
+
+```js
+describe('Configuração do Ambiente de Testes', () => {
+  // blocos de teste aqui
+});
+```
+
+O grupo de testes será descrito como “Configuração do Ambiente de Testes”, e todos os testes definidos dentro desse escopo estão relacionados à verificação do ambiente e conexão com o banco.
+
+---
+
+## ✅ `it()`: Casos de Teste Individuais
+
+A função `it()` define um **caso de teste específico**, ou seja, um cenário que será executado e validado.
+
+Ela também recebe dois argumentos:
+
+* Uma string que descreve o que o teste deve validar;
+* Uma função assíncrona (ou síncrona) que executa o teste.
+
+**Exemplo:**
+
+```js
+it('Deve conectar ao banco PostgreSQL', async () => {
+  await sequelize.authenticate();
+  expect(sequelize.config.database).to.equal('playlist_test');
+});
+```
+
+Este teste verifica se a conexão com o banco de dados foi estabelecida com sucesso.
+
+Outro exemplo:
+
+```js
+it('Deve criar um usuário no banco PostgreSQL', async () => {
+  const usuario = await db.Usuario.create({
+    login: 'teste123',
+    nome: 'Usuário Teste',
+  });
+
+  expect(usuario).to.have.property('id');
+  expect(usuario.login).to.equal('teste123');
+  expect(usuario.nome).to.equal('Usuário Teste');
+});
+```
+
+Este teste garante que o Sequelize consegue inserir um novo usuário na tabela e que os campos essenciais foram persistidos corretamente.
+
+---
+
+## 🧾 `expect()`: Asserções com Chai
+
+A função `expect()` é parte da biblioteca **Chai** e é usada para realizar **asserções**, ou seja, verificar se os valores obtidos no teste correspondem aos valores esperados.
+
+### Exemplos comuns:
+
+* `expect(valor).to.equal(esperado)` – Verifica igualdade estrita;
+* `expect(objeto).to.have.property('nome')` – Verifica se a propriedade existe;
+* `expect(lista).to.be.an('array')` – Verifica o tipo do valor.
+
+**Exemplo no contexto do teste:**
+
+```js
+expect(usuario).to.have.property('id');
+expect(usuario.login).to.equal('teste123');
+expect(usuario.nome).to.equal('Usuário Teste');
+```
+
+Essas instruções garantem que:
+
+* O objeto `usuario` retornado tem um identificador (`id`);
+* O valor do campo `login` corresponde ao informado;
+* O nome foi armazenado corretamente no banco de dados.
+
+---
+
+## 🧰 Considerações Finais
+
+* Os testes devem ser executados em um ambiente isolado, geralmente um banco específico de testes (ex: `playlist_test`);
+* O uso de `async/await` nos testes é fundamental quando se trabalha com operações assíncronas como é o caso das operações de banco;
+* O Sequelize deve estar devidamente configurado no `setup.js` para que os testes funcionem corretamente, conectando-se ao banco de testes e expondo os modelos via `db`.
+
+> Esse padrão de testes é fundamental para garantir que sua aplicação esteja se comportando corretamente durante o desenvolvimento e antes de entrar em produção.
+
+----------------------------------------
+
+
+    5. Configurando *package.json*, para npm start, npm test. Lembrando que estamos utilizando o nodemon.
+      Para automatizar a execução dos testes vamos atualizar o packege.json, na propriedade scripts
 
         ```json
 
@@ -129,12 +237,15 @@
               },
         ```
 
-  Caso o cross-env não esteja no seu package.jso, se faz necessário instalar com:
+  Caso o cross-env não esteja no seu package.json, se faz necessário instalar com:
     
     ```
       npm install cross-env
     ```
   O cross-env é necessário para carregar variáveis do ambiente ao rodar o projeto no SO windows.
+
+  3. ## Criando dos testes para os models
+
     6. Criar arquivos testes, por exemplo Canal.test.js
    
   ```js
@@ -285,7 +396,7 @@
   ```
 
  
-3. Testar ao final, executar
+4. ## Testar ao final, executar
   
   Executar uma inserção simples mas que ao ser repetida temos um erro
   ```
