@@ -184,7 +184,7 @@ O cross-env é necessário para carregar variáveis do ambiente ao rodar o proje
 
 Este projeto utiliza **Mocha** como framework de testes e **Chai** como biblioteca de asserções. Os testes são aplicados diretamente sobre a conexão com o banco de dados PostgreSQL e sobre o funcionamento das operações via Sequelize ORM.
 
-## 🔍 `describe()`: Agrupamento Lógico dos Testes
+## `describe()`: Agrupamento Lógico dos Testes
 
 A função `describe()` é usada para **organizar e agrupar casos de teste relacionados** sob um mesmo contexto ou funcionalidade. Ela recebe dois argumentos:
 
@@ -203,7 +203,7 @@ O grupo de testes será descrito como “Configuração do Ambiente de Testes”
 
 ---
 
-## ✅ `it()`: Casos de Teste Individuais
+## `it()`: Casos de Teste Individuais
 
 A função `it()` define um **caso de teste específico**, ou seja, um cenário que será executado e validado.
 
@@ -242,7 +242,7 @@ Este teste garante que o Sequelize consegue inserir um novo usuário na tabela e
 
 ---
 
-## 🧾 `expect()`: Asserções com Chai
+## `expect()`: Asserções com Chai
 
 Todos os exemplos postos tem dentro dos testes os comandos **expect** pois são eles quem de fatos testam algo. Testam um propriedade de um objeto/propriedade e testam se ela existe, ou se tem um determinado valor, e etc.
 
@@ -314,8 +314,8 @@ canais.forEach(canal => {
 ```
 
 Exceção Esperada:
-```js
 
+```js
 try {
   await db.Usuario.create({ nome: 'Sem login' });
   expect.fail('Erro de validação não foi lançado');
@@ -326,7 +326,7 @@ try {
 ```
 ---
 
-## 🧰 Considerações Finais
+## Considerações Finais
 
 * Os testes devem ser executados em um ambiente isolado, geralmente um banco específico de testes (ex: `playlist_test`);
 * O uso de `async/await` nos testes é fundamental quando se trabalha com operações assíncronas como é o caso das operações de banco;
