@@ -2,10 +2,12 @@ import { expect } from 'chai';
 import { sequelize, db } from './setup.js';
 
 describe('Comentario2 Model - Validações adicionais', () => {
+  //tanto o usuario como o filme são utilizados sempre para cada comentário, vamos colocar eles dentro de 
+  //um bloco beforeEach
   let usuario, filme;
 
   beforeEach(async () => {
-    // Limpa e recria o banco antes de cada teste
+    // Limpa e recria o banco antes de cada teste p
     await sequelize.sync({ force: true });
 
     usuario = await db.Usuario.create({

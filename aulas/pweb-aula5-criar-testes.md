@@ -9,12 +9,13 @@
 1. ## Instalar pacotes
   Comando a executar
 
-    ```
-        npm install chai mocha sequelize-test-helpers sinon
 
+    ```sh
+        npm install chai mocha sequelize-test-helpers sinon
     ```
 
     Essas linhas seram inseridas no seu package.json
+
      ```json
         "chai": "^5.2.0",
         "mocha": "^11.1.0",
@@ -23,12 +24,35 @@
      ```
 
      Lembrando que os testes serão executados com o comando:
+     
       ```
         npm test
       ```
 
-    A próxima seção trata exatamente ads configurações necessárias. Desde a criação do banco, a escrita dos configurações da nova conexão oa banco de teste, até 
-    configuração no package.json para execução dos testes com **npm install**.
+  Mas para isso é necessária configuração no package.json
+
+  Configurando *package.json*, para npm start, npm test. Lembrando que estamos utilizando o nodemon.
+  Para automatizar a execução dos testes vamos atualizar o packege.json, na propriedade scripts
+
+  ```json
+
+        "scripts": {
+          "start": "npx nodemon server.js",
+          "test": "cross-env NODE_ENV=test mocha tests/**/*.test.js --exit"
+        },
+  ```
+
+  Caso o cross-env não esteja no seu package.json, se faz necessário instalar com:
+  
+  ```sh
+    npm install cross-env
+  ```
+
+  O cross-env faz funcionar as configurações de variáveis no ambiente windows.
+  O trecho ```mocha tests/**/*.test.js**``` faz com que todos os arquivos terminados com test.js dentro da pasta tests sejam executados. Já o trecho ```NODE_ENV=test```, configura essa variável que será utilizada no ```config/database.js```.
+
+
+  A próxima seção trata exatamente ads configurações necessárias. Desde a criação do banco, a escrita dos configurações da nova conexão ao banco de teste
 
 2. ## Criar configuração de banco, criação pasta tests, configuração do package.json
 
@@ -109,68 +133,51 @@
 
       Repare a última linha que exporta a conexão sequelize e a referência de todos models dentro da variável db.
 
-        ### **Novo arquivo setup.test.js** -  um teste simples apenas para verificar se o setup está OK
-        
-        ###Criar tests/setup.test.js
+      ### **Novo arquivo setup.test.js** -  um teste simples apenas para verificar se o setup está OK
+      
+      ### Criar tests/setup.test.js
 
-        Esse arquivo importa o **setup.js** para a configuração necessário do banco para testes. Todos os seus arquivos de testes importaram esse
-        arquivo.
+      Esse arquivo importa o **setup.js** para a configuração necessário do banco para testes. Todos os seus arquivos de testes importaram esse
+      arquivo.
 
-        Ele autentica e testa o nome do banco testes no primeiro test, sobre o comando **it**, no trecho:
-
-          ```js
-            it('Deve conectar ao banco PostgreSQL', async () => {
-              await sequelize.authenticate();
-              expect(sequelize.config.database).to.equal('playlist_test');
-            });
-          ```
-
-        A seguir cria um usuário simples em uma operação com o await db.Usuario.create
-
-        ## Arquivo completo
+      Ele autentica e testa o nome do banco testes no primeiro test, sobre o comando **it**, no trecho:
 
         ```js
-          import { expect } from 'chai';
-          import { sequelize, db } from './setup.js';
-
-          describe('Configuração do Ambiente de Testes', () => {
-            it('Deve conectar ao banco PostgreSQL', async () => {
-              await sequelize.authenticate();
-              expect(sequelize.config.database).to.equal('playlist_test');
-            });
-
-            it('Deve criar um usuário no banco PostgreSQL', async () => {
-              const usuario = await db.Usuario.create({
-                login: 'teste123',
-                nome: 'Usuário Teste',
-              });
-
-              expect(usuario).to.have.property('id');
-              expect(usuario.login).to.equal('teste123');
-              expect(usuario.nome).to.equal('Usuário Teste');
-            });
+          it('Deve conectar ao banco PostgreSQL', async () => {
+            await sequelize.authenticate();
+            expect(sequelize.config.database).to.equal('playlist_test');
           });
         ```
 
+      A seguir cria um usuário simples em uma operação com o await db.Usuario.create
+
+      ### Arquivo completo
+
+      ```js
+        import { expect } from 'chai';
+        import { sequelize, db } from './setup.js';
+
+        describe('Configuração do Ambiente de Testes', () => {
+          it('Deve conectar ao banco PostgreSQL', async () => {
+            await sequelize.authenticate();
+            expect(sequelize.config.database).to.equal('playlist_test');
+          });
+
+          it('Deve criar um usuário no banco PostgreSQL', async () => {
+            const usuario = await db.Usuario.create({
+              login: 'teste123',
+              nome: 'Usuário Teste',
+            });
+
+            expect(usuario).to.have.property('id');
+            expect(usuario.login).to.equal('teste123');
+            expect(usuario.nome).to.equal('Usuário Teste');
+          });
+        });
+      ```
+
     Obs.: O trecho de código acima:
 
-
-5. Configurando *package.json*, para npm start, npm test. Lembrando que estamos utilizando o nodemon.
-  Para automatizar a execução dos testes vamos atualizar o packege.json, na propriedade scripts
-
-    ```json
-
-          "scripts": {
-            "start": "npx nodemon server.js",
-            "test": "cross-env NODE_ENV=test mocha tests/**/*.test.js --exit"
-          },
-    ```
-
-Caso o cross-env não esteja no seu package.json, se faz necessário instalar com:
-  
-  ```sh
-    npm install cross-env
-  ```
 O cross-env é necessário para carregar variáveis do ambiente ao rodar o projeto no SO windows.
 
 # 🧪 Estrutura dos Testes com Mocha, Chai e Sequelize
@@ -254,13 +261,69 @@ expect(usuario).to.have.property('id');
 expect(usuario.login).to.equal('teste123');
 expect(usuario.nome).to.equal('Usuário Teste');
 ```
-
 Essas instruções garantem que:
 
 * O objeto `usuario` retornado tem um identificador (`id`);
 * O valor do campo `login` corresponde ao informado;
 * O nome foi armazenado corretamente no banco de dados.
 
+
+Testando relacionamentos
+
+```js
+const comentario = await db.Comentario.create({
+  id_usuario: usuario.id,
+  id_filme: filme.id,
+  texto: 'Gostei muito!',
+  avaliacao: 8.5,
+});
+
+expect(comentario).to.have.property('id_usuario', usuario.id);
+expect(comentario).to.have.property('id_filme', filme.id);
+expect(comentario.texto).to.be.a('string').and.to.have.length.above(5);
+```
+
+Testando tratamento de erros:
+
+```js
+try {
+  await db.Usuario.create({ nome: 'Sem login' }); // login é obrigatório
+  expect.fail('Erro esperado de validação não foi lançado');
+} catch (error) {
+  expect(error.name).to.equal('SequelizeValidationError');
+  expect(error.errors[0].message).to.match(/login/);
+}
+```
+
+🚫 Verificar negações
+```js
+expect(usuario).to.not.have.property('senha'); // campo não exposto
+expect(comentario.texto).to.not.equal('');
+```
+
+Verificar listas de objetos
+
+```js
+const canais = await db.Canal.findAll();
+expect(canais).to.be.an('array').and.to.have.length.greaterThan(0);
+
+canais.forEach(canal => {
+  expect(canal).to.have.property('nome');
+  expect(canal.genero_tema).to.be.oneOf(['Educação', 'Entretenimento']);
+});
+```
+
+Exceção Esperada:
+```js
+
+try {
+  await db.Usuario.create({ nome: 'Sem login' });
+  expect.fail('Erro de validação não foi lançado');
+} catch (error) {
+  expect(error.name).to.equal('SequelizeValidationError');
+  expect(error.errors[0].message).to.match(/login/);
+}
+```
 ---
 
 ## 🧰 Considerações Finais
