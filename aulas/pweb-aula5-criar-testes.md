@@ -22,6 +22,14 @@
         "sinon": "^20.0.0"
      ```
 
+     Lembrando que os testes serão executados com o comando:
+      ```
+        npm test
+      ```
+
+    A próxima seção trata exatamente ads configurações necessárias. Desde a criação do banco, a escrita dos configurações da nova conexão oa banco de teste, até 
+    configuração no package.json para execução dos testes com **npm install**.
+
 2. ## Criar configuração de banco e pasta
 
     1. Criar banco playlist_test no postgresql/pgadmin
@@ -72,6 +80,8 @@
 
     4. Criar arquivos de configuração e tests simples
 
+    O arquivo setup.js configura para que o banco playlist_test seja limpo e recriado a cada teste. Isso ajuda a evitar que restrições como unicidade
+    de login causem error. O banco de testes ajuda em isolar e tem um ambiente propício para testes.
         tests/setup.js
 
         ```js
