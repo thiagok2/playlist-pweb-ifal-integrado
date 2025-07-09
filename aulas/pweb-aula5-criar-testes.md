@@ -30,11 +30,11 @@
     A próxima seção trata exatamente ads configurações necessárias. Desde a criação do banco, a escrita dos configurações da nova conexão oa banco de teste, até 
     configuração no package.json para execução dos testes com **npm install**.
 
-2. ## Criar configuração de banco e pasta
+2. ## Criar configuração de banco, criação pasta tests, configuração do package.json
 
-    1. Criar banco playlist_test no postgresql/pgadmin
+  1. Criar banco playlist_test no postgresql/pgadmin
 
-    2. Atualizar config/database.js criando variaveis para os ambientes
+  2. Atualizar config/database.js criando variaveis para os ambientes
 
     ```js
       import { Sequelize } from 'sequelize';
@@ -75,14 +75,13 @@
 
       export default sequelize;
     ```
+  3. Criar a pasta tests
 
-    3. Criar a pasta tests
+  4. Criar arquivos de configuração e tests simples
 
-    4. Criar arquivos de configuração e tests simples
-
-    O arquivo setup.js configura para que o banco playlist_test seja limpo e recriado a cada teste. Isso ajuda a evitar que restrições como unicidade
-    de login causem error. O banco de testes ajuda em isolar e tem um ambiente propício para testes.
-        tests/setup.js
+    O arquivo **setup.js** configura para que o banco playlist_test seja limpo e recriado a cada teste. Isso ajuda a evitar que restrições como unicidadede login causem erro. O banco de exclusivo paratestes ajuda em isolar o ambiente com foco testes.
+      
+    ### tests/setup.js
 
         ```js
         import * as models from '../models/Index.js';
@@ -108,9 +107,27 @@
         export { sequelize, db };
         ```
 
-        **Novo arquivo setup.test.js -  um teste simples apenas para verificar se o setup está OK**
+      Repare a última linha que exporta a conexão sequelize e a referência de todos models dentro da variável db.
 
-        Criar tests/setup.test.js
+        ### **Novo arquivo setup.test.js** -  um teste simples apenas para verificar se o setup está OK
+        
+        ###Criar tests/setup.test.js
+
+        Esse arquivo importa o **setup.js** para a configuração necessário do banco para testes. Todos os seus arquivos de testes importaram esse
+        arquivo.
+
+        Ele autentica e testa o nome do banco testes no primeiro test, sobre o comando **it**, no trecho:
+
+          ```js
+            it('Deve conectar ao banco PostgreSQL', async () => {
+              await sequelize.authenticate();
+              expect(sequelize.config.database).to.equal('playlist_test');
+            });
+          ```
+
+        A seguir cria um usuário simples em uma operação com o await db.Usuario.create
+
+        ## Arquivo completo
 
         ```js
           import { expect } from 'chai';
@@ -136,6 +153,25 @@
         ```
 
     Obs.: O trecho de código acima:
+
+
+5. Configurando *package.json*, para npm start, npm test. Lembrando que estamos utilizando o nodemon.
+  Para automatizar a execução dos testes vamos atualizar o packege.json, na propriedade scripts
+
+    ```json
+
+          "scripts": {
+            "start": "npx nodemon server.js",
+            "test": "cross-env NODE_ENV=test mocha tests/**/*.test.js --exit"
+          },
+    ```
+
+Caso o cross-env não esteja no seu package.json, se faz necessário instalar com:
+  
+  ```sh
+    npm install cross-env
+  ```
+O cross-env é necessário para carregar variáveis do ambiente ao rodar o projeto no SO windows.
 
 # 🧪 Estrutura dos Testes com Mocha, Chai e Sequelize
 
@@ -201,6 +237,8 @@ Este teste garante que o Sequelize consegue inserir um novo usuário na tabela e
 
 ## 🧾 `expect()`: Asserções com Chai
 
+Todos os exemplos postos tem dentro dos testes os comandos **expect** pois são eles quem de fatos testam algo. Testam um propriedade de um objeto/propriedade e testam se ela existe, ou se tem um determinado valor, e etc.
+
 A função `expect()` é parte da biblioteca **Chai** e é usada para realizar **asserções**, ou seja, verificar se os valores obtidos no teste correspondem aos valores esperados.
 
 ### Exemplos comuns:
@@ -209,7 +247,7 @@ A função `expect()` é parte da biblioteca **Chai** e é usada para realizar *
 * `expect(objeto).to.have.property('nome')` – Verifica se a propriedade existe;
 * `expect(lista).to.be.an('array')` – Verifica o tipo do valor.
 
-**Exemplo no contexto do teste:**
+**Exemplo no contexto do teste Usuario.test.js:**
 
 ```js
 expect(usuario).to.have.property('id');
@@ -235,24 +273,6 @@ Essas instruções garantem que:
 
 ----------------------------------------
 
-
-    5. Configurando *package.json*, para npm start, npm test. Lembrando que estamos utilizando o nodemon.
-      Para automatizar a execução dos testes vamos atualizar o packege.json, na propriedade scripts
-
-        ```json
-
-              "scripts": {
-                "start": "npx nodemon server.js",
-                "test": "cross-env NODE_ENV=test mocha tests/**/*.test.js --exit"
-              },
-        ```
-
-  Caso o cross-env não esteja no seu package.json, se faz necessário instalar com:
-    
-    ```
-      npm install cross-env
-    ```
-  O cross-env é necessário para carregar variáveis do ambiente ao rodar o projeto no SO windows.
 
   3. ## Criando dos testes para os models
 
