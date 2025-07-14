@@ -15,6 +15,7 @@ const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 
+// METODOS HTTP( GET, POST, PUT, DELETE)
 app.get('/version', (req, res) => {
   res.json({ status: 'ok', version: '1.0.1' });
 });

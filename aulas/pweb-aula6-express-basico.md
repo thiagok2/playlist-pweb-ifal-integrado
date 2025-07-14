@@ -1,19 +1,25 @@
 # Roteamento
 
-Instalação da biblioca
-```
+Instalação da biblioteca:
+
+```sh
 	npm install express
 ```
 
+Ela já foi instalada anteriormente, e já consta no package.json
+
 Criar arquivo server.js na pasta raiz do projeto
 
-Criar pasta routes. Na pasta, criar arquivos
+Criar pasta routes. Na pasta, essas arquivos serão criados.
+
+
+```
 ├── routes/
 │   ├── UsuariosRouters.js
 │   ├── FilmesRouters.js
 │   ├── CanaisRouters.js
 │   ├── PlaylistsRouters.js 
-
+```
 ## Criar arquivo principal das rotas
 
 No arquivo server.js
@@ -57,14 +63,14 @@ sequelize.sync({ alter: true })
 
 ## Testar server no terminal:
 ```js
-	node server.js
+	npm start
 ```
 
 Testar no postman
 
 http://localhost:3000/version
 
-E tudo deve estar ok. Se não estiver... corrigir!
+E tudo deve estar OK. Se não estiver... corrigir!
 
 
 ## Criando primeira rota
@@ -77,6 +83,10 @@ import usuarioRoutes from './routes/UsuariosRouters.js';
 
 app.use('/usuarios', usuarioRoutes);
 ```
+
+### UsuariosRouters
+Agora vamos editar o UsuariosRouters.js:
+
 
 ```js
 
@@ -111,8 +121,8 @@ GET http://localhost:3000/usuarios
 Adicionar naquele trecho onde está o comentário //Rotas vão aqui!
 
 ```js
-router.post('/', async (_req, res) => {
-  const usuario = await Usuario.create(_req.bodyß);
+router.post('/', async (req, res) => {
+  const usuario = await Usuario.create(req.body);
   res.json(usuario);
 });
 ```
