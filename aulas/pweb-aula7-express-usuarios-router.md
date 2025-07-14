@@ -1,15 +1,16 @@
-# Rotas de Usuários com Express e Sequelize
+# Rotas de Usuários com Express e Sequelize - completo
 
-O objetivo é explicar cada rota do arquivo `UsuariosRouters.js`, destacando o uso do Sequelize e o tratamento de no Express.
+O objetivo é explicar cada rota do arquivo `UsuariosRouters.js`, destacando o uso do Sequelize e o tratamento de no Express. Muitas features do sequelize como consultas um poucos mais elaboradas serão testadas..
 
 ---
 
 ## Pré-requisitos
 
-1. **Express** está instalado:
-   ```bash
+1. **Express** ja deve estar instalado:
+   
+```sh
    npm install express
-   ```
+```
 
 2. A pasta `routes` contém o arquivo `UsuariosRouters.js`.
 
@@ -17,7 +18,7 @@ O objetivo é explicar cada rota do arquivo `UsuariosRouters.js`, destacando o u
 
 ## Estrutura do Projeto
 
-A estrutura do projeto segue a organização abaixo:
+A estrutura do projeto segue a organização abaixo. Vamos criar primeiro o UsuariosRouters. Os seguintes serão criados usando os mesmos recursos:
 
 ```
 ├── routes/
@@ -29,6 +30,7 @@ A estrutura do projeto segue a organização abaixo:
 ├── config/
 │   ├── database.js
 ├── server.js
+
 ```
 
 Este guia foca no arquivo `routes/UsuariosRouters.js`.
@@ -39,14 +41,13 @@ Este guia foca no arquivo `routes/UsuariosRouters.js`.
 ## Configurar arquivo server.js
 
 No arquivo server.js acrescentar novos imports:
+
 ```js
-import usuarioRoutes from './routes/UsuariosRouters.js';
-import filmeRoutes from './routes/FilmesRouters.js';
+import usuariosRoutes from './routes/UsuariosRouters.js';
 ...
 const app = express();
 ...
-app.use('/usuarios', usuarioRoutes);
-app.use('/filmes', filmeRoutes);
+app.use('/usuarios', usuariosRoutes);
 ...
 
 
@@ -67,33 +68,29 @@ As rotas implementadas no arquivo `UsuariosRouters.js` são:
 
 ---
 
-### 0. Definir imports
+### 0. Definindo base do arquivo UsuariosRouters.js
 
-No topo do arquivo definir os imports
+No topo do arquivo definir os imports, depois a criação da instância com no objeto router. Por fim, exportar o router.
 
 ```js
 import express from 'express';
 import { Usuario } from '../models/Index.js';
-import { Op }  from 'sequelize';
-```
-
-No topo final do arquivo, escrever
-```js
-export default router;
-```
-
-### 2. Instanciar objeto router
-``` js
+import { Op }  from 'sequelize';//novo import!
 
 const router = express.Router();
 
+//...
+export default router;
 ```
+
+Feito o básico, acima
 
 ### 1. Listar Todos os Usuários (`GET /`)
 
 **Objetivo**: Retornar uma lista de todos os usuários cadastrados no banco de dados.
 
 **Código**:
+
 ```js
 router.get('/', async (req, res) => {
   try {
@@ -103,6 +100,7 @@ router.get('/', async (req, res) => {
     return res.status(500).json({ error: 'Erro recuperar usuários', details: err });
   }
 });
+
 ```
 
 **Explicação**:
@@ -127,6 +125,7 @@ router.get('/', async (req, res) => {
 **Objetivo**: Retornar os dados de um usuário específico com base no ID fornecido.
 
 **Código**:
+
 ```js
 router.get('/:id', async (req, res) => {
   try {
@@ -222,6 +221,18 @@ router.put('/:id', async (req, res) => {
       const updatedUser = await Usuario.findByPk(id);
       return res.json(updatedUser);
     }
+
+
+    //uma segunda forma de fazer essa mesma operação:
+    /*
+      const usuario = await Usuario.findByPk(id);
+      if (!usuario) {
+        return res.status(404).json({ error: 'Usuário não encontrado' });
+      }
+
+      await usuario.update(req.body);
+      return res.json(usuario); 
+    */
 
     return res.status(404).json({ error: 'Usuário não encontrado' });
   } catch (err) {
@@ -421,7 +432,7 @@ Isso associa todas as rotas definidas em `UsuariosRouters.js` ao prefixo `/usuar
 
 1. **Iniciar o servidor**:
    ```bash
-   node server.js
+   npm start.js
    ```
    Verifique no console: `Database ok` e `Server ok port 3000`.
 
