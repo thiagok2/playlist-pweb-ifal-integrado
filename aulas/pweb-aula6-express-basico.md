@@ -73,9 +73,11 @@ http://localhost:3000/version
 E tudo deve estar OK. Se não estiver... corrigir!
 
 
-## Criando primeira rota
-Criar um arquivo routes/UsuariosRouters.js
+## Criando as primeiras rotas de Usuário
+
 Obs.: Lembre-se de descomentar os trechos no server.js que se referem as rotas de usuário.
+
+**server.js**
 
 ```js
 import usuarioRoutes from './routes/UsuariosRouters.js';
@@ -84,14 +86,15 @@ import usuarioRoutes from './routes/UsuariosRouters.js';
 app.use('/usuarios', usuarioRoutes);
 ```
 
-### UsuariosRouters
+### UsuariosRouters.js
 Agora vamos editar o UsuariosRouters.js:
 
 
 ```js
 
 import express from 'express';
-import { Usuario } from '../models/Index.js';
+import { Usuario } from '../models/Index.js';//arquivo Index.js centraliza todos os models e seus relacionamentos
+
 const router = express.Router();
 
 //Rotas vão aqui! Vamos implementar daqui a pouco
@@ -122,11 +125,13 @@ Adicionar naquele trecho onde está o comentário //Rotas vão aqui!
 
 ```js
 router.post('/', async (req, res) => {
-  const usuario = await Usuario.create(req.body);
+  const usuario = await Usuario.create(req.body);// body a ser definido no postman no formato json
   res.json(usuario);
 });
 ```
-TESTAR no navegador ou no Postman
+## TESTAR no navegador ou no Postman
+
+Na definição da **request**, definir o **body** como **raw**, e definir o formato como **json**. 
 
 POST http://localhost:3000/usuarios
 {
