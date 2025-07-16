@@ -182,12 +182,12 @@ router.post('/', async (req, res) => {
 - **Método HTTP**: `POST`
 - **Rota**: `/usuarios`
 - **Função do Sequelize**:
-  - `Usuario.build(req.body)`: Cria uma instância do modelo `Usuario` com os dados do corpo da requisição (e.g., `{ "nome": "José Paulo", "login": "jose.paulo", "email": "jose@example.com" }`).
-  - `usuario.validate()`: Valida os dados com base nas regras definidas no modelo (e.g., campos obrigatórios, formatos).
+  - `Usuario.build(req.body)`: Cria uma instância do modelo `Usuario` com os dados do corpo da requisição sem salvar no banco (e.g., `{ "nome": "José Paulo", "login": "jose.paulo", "email": "jose@example.com" }`).
+  - `usuario.validate()`: Valida os dados com base nas regras definidas no modelo (e.g., campos obrigatórios, formatos). Caso aconteça um erro, ele será lançado antes de tentar salvar.
   - `usuario.save()`: Persiste o usuário no banco de dados (equivalente a `INSERT INTO Usuarios ...`).
 - **Express**:
-  - `req.body`: Contém os dados enviados no corpo da requisição (formato JSON).
-  - `res.json(usuario)`: Retorna o usuário criado como resposta.
+  - `req.body`: Objeto req representa a request, os dados vindos do postman ou do browser, logo contém os dados enviados no corpo(body) da requisição (formato JSON).
+  - `res.json(usuario)`: Objeto representa a resposta, retorna o usuário criado como respost, retornando em um formato json.
 - **Tratamento de Erros**:
   - Erros de validação (e.g., email inválido) ou falhas no banco são capturados no bloco `try/catch`.
   - Retorna status 500 com detalhes do erro.
@@ -209,10 +209,15 @@ router.post('/', async (req, res) => {
 **Objetivo**: Atualizar os dados de um usuário existente com base no ID.
 
 **Código**:
+
 ```js
 router.put('/:id', async (req, res) => {
+
   const { id } = req.params;
+
   try {
+    // O método retorna apenas o número de instâncias que foram alteradas. O método recebe no body, os valores e campos em json, 
+    // no exemplo postman {"nome": "Maria Alice", "email": "mariaalice@aluno.ifal.edu.br"}, e o segundo parametro com where, que faz a filtragem por apenas um registro.
     const [updated] = await Usuario.update(req.body, {
       where: { id },
     });
@@ -222,7 +227,7 @@ router.put('/:id', async (req, res) => {
       return res.json(updatedUser);
     }
 
-
+    // A seguir, uma segunda forma de fazer.  Busca o objeto com findByPk, e depois atualiza com update.
     //uma segunda forma de fazer essa mesma operação:
     /*
       const usuario = await Usuario.findByPk(id);
@@ -270,6 +275,8 @@ router.put('/:id', async (req, res) => {
 
 **Objetivo**: Remover um usuário do banco de dados com base no ID.
 
+Exclui o objeto com uma única instrução de destroy. Observe que ele usa where: { id } parecido como faz a operação de update. Veja também, que ele retorna  também o número de registros removidos, assim como o método update retorna os atualizados.
+
 **Código**:
 ```js
 router.delete('/:id', async (req, res) => {
@@ -291,6 +298,7 @@ router.delete('/:id', async (req, res) => {
 ```
 
 **Explicação**:
+
 - **Método HTTP**: `DELETE`
 - **Rota**: `/usuarios/:id` (e.g., `/usuarios/1`)
 - **Função do Sequelize**:
@@ -307,20 +315,31 @@ router.delete('/:id', async (req, res) => {
 
 ---
 
+# Usando o objeto Op para combinar buscas
+
+Primeiro é adicionar o import:
+
+```js
+import { Op }  from 'sequelize';
+```
+
 ### 6. Buscar Usuários por Nome, Login ou Email (`GET /search`)
 
 **Objetivo**: Realizar uma busca flexível por usuários com base em um termo de pesquisa que pode corresponder ao `nome`, `login` ou `email`.
 
 
 #### Importante: Onde colocar nos métodos novos
-  Obs.: As próximas rotas devem ser criadas no topo do arquivo para que as elas não fiquem escondidas e sejam interpretadas
+
+  Atenção: As próximas rotas devem ser criadas no topo do arquivo para que as elas não fiquem escondidas e sejam interpretadas
   no get/:id. 
 
 
 **Código**:
 ```js
 router.get('/search', async (req, res) => {
+  
   const { q } = req.query;
+
   if (!q) {
     return res.status(400).json({ error: 'Parâmetro "q" é obrigatório' });
   }
@@ -346,13 +365,14 @@ router.get('/search', async (req, res) => {
 **Explicação**:
 - **Método HTTP**: `GET`
 - **Rota**: `/usuarios/search?q=termo` (e.g., `/usuarios/search?q=jose`)
+- **Obrigatório**: Observe que enviar o **q**, com uma requisição como /usuarios/search?q=gabriel, o **q** é obrigatório.
 - **Função do Sequelize**:
   - `Usuario.findAll({ where: { [Op.or]: [...] } })`: Realiza uma consulta com a condição `OR`, combinando múltiplos critérios.
   - `Op.iLike`: Operador do Sequelize para busca case-insensitive com correspondência parcial (equivalente a `LIKE` no SQL com `%` para qualquer sequência de caracteres).
-  - Exemplo: `{ nome: { [Op.iLike]: `%${q}%` } }` busca nomes que contenham o termo `q`.
+  - Exemplo: `{ nome: { [Op.iLike]: `%${q}%` } }` busca nomes que contenham o termo `q`. A operação iLike é o equivalente ao like de banco sem observar se maiusculo/minusculo, tanto faz.
 - **Express**:
   - `req.query.q`: Extrai o parâmetro de consulta `q` da URL (e.g., `jose` em `/search?q=jose`).
-  - Valida se `q` foi fornecido; se não, retorna status 400 (Bad Request).
+  - O if com q valida se `q` foi fornecido; se não, retorna status 400 (Bad Request).
   - `res.json(usuarios)`: Retorna a lista de usuários correspondentes.
 - **Tratamento de Erros**:
   - Captura erros de consulta e retorna status 500.
