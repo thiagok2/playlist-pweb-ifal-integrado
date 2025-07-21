@@ -98,6 +98,18 @@ router.post('/', async (req, res) => {
     
 });
 
+//recebe uma lista de usuários e salva no modo bulk
+router.post('/batch', async (req, res) => {
+  try {
+    const result = await Usuario.bulkCreate(req.body);
+    
+    res.json(result);
+  } catch (err) {
+    return res.status(500).json({ error: 'Erro ao salvar usuário', details: err });
+  }
+    
+});
+
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
   try {
