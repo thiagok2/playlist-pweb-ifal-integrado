@@ -27,17 +27,20 @@ Filme.belongsToMany(Canal, {
   foreignKey: 'id_filme',
 });
 
-Usuario.hasMany(Playlist, { foreignKey: 'id_usuario' });
-Playlist.belongsTo(Usuario, { foreignKey: 'id_usuario' });
+Usuario.hasMany(Playlist, { foreignKey: 'id_usuario', onDelete: 'CASCADE' });
+Playlist.belongsTo(Usuario, { foreignKey: 'id_usuario', onDelete: 'CASCADE' });
 
-Usuario.hasMany(Comentario, { foreignKey: 'id_usuario' });
-Comentario.belongsTo(Usuario, { foreignKey: 'id_usuario' });
+Usuario.hasMany(Canal, { foreignKey: 'id_usuario', onDelete: 'CASCADE' });
+Canal.belongsTo(Usuario, { foreignKey: 'id_usuario', onDelete: 'CASCADE' });
 
-Filme.hasMany(Comentario, { foreignKey: 'id_filme' });
-Comentario.belongsTo(Filme, { foreignKey: 'id_filme' });
+Usuario.hasMany(Comentario, { foreignKey: 'id_usuario', onDelete: 'CASCADE' });
+Comentario.belongsTo(Usuario, { foreignKey: 'id_usuario', onDelete: 'CASCADE' });
 
-Usuario.hasMany(Mensalidade, { foreignKey: 'id_usuario' });
-Mensalidade.belongsTo(Usuario, { foreignKey: 'id_usuario' });
+Filme.hasMany(Comentario, { foreignKey: 'id_filme', onDelete: 'CASCADE' });
+Comentario.belongsTo(Filme, { foreignKey: 'id_filme', onDelete: 'CASCADE' });
+
+Usuario.hasMany(Mensalidade, { foreignKey: 'id_usuario', onDelete: 'CASCADE' });
+Mensalidade.belongsTo(Usuario, { foreignKey: 'id_usuario', onDelete: 'CASCADE' });
 
 
 Playlist.belongsToMany(Filme, {

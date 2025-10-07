@@ -10,17 +10,27 @@ export default (sequelize) => {
     id_usuario: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: { model: 'usuarios', key: 'id' },
+      onDelete: 'CASCADE', onUpdate: 'CASCADE',
     },
     nome: {
       type: DataTypes.STRING(200),
     },
-    data_criacao: {
-      type: DataTypes.DATE,
-      default: Sequelize.NOW
+    numero_views: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    },
+    numero_adds: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
     },
   }, {
     tableName: 'playlists',
-    timestamps: false,
+    timestamps: true,
+    indexes: [
+      { fields: ['id_usuario'] },
+      // (opcional) { unique: true, fields: ['id_usuario', 'nome'] },
+    ]
   });
 
   return Playlist;

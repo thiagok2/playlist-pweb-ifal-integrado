@@ -10,10 +10,14 @@ export default (sequelize) => {
     id_canal: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: { model: 'canais', key: 'id' },
+      onDelete: 'CASCADE', onUpdate: 'CASCADE',
     },
     id_filme: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: { model: 'filmes', key: 'id' },
+      onDelete: 'CASCADE', onUpdate: 'CASCADE',
     },
     data_recomendacao: {
       type: DataTypes.DATE,
@@ -21,8 +25,13 @@ export default (sequelize) => {
     },
   }, {
     tableName: 'canal_filmes',
-    timestamps: false,
+    timestamps: true,
+    indexes: [
+      { unique: true, fields: ['id_canal', 'id_filme'] },
+      { fields: ['id_filme'] },
+    ]
   });
+
 
   return CanalFilme;
 };

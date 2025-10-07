@@ -10,10 +10,14 @@ export default (sequelize) => {
     id_usuario: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: { model: 'usuarios', key: 'id' },
+      onDelete: 'CASCADE', onUpdate: 'CASCADE',
     },
     id_filme: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: { model: 'filmes', key: 'id' },
+      onDelete: 'CASCADE', onUpdate: 'CASCADE',
     },
     texto: {
       type: DataTypes.TEXT,
@@ -45,7 +49,11 @@ export default (sequelize) => {
     },
   }, {
     tableName: 'comentarios',
-    timestamps: false,
+    timestamps: true,
+    indexes: [
+      { fields: ['id_filme'] },
+      { fields: ['id_usuario'] },
+    ]
   });
 
   return Comentario;

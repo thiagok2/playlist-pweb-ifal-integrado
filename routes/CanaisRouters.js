@@ -46,11 +46,10 @@ router.get('/:id', async (req, res) => {
 // POST /canais - cria novo canal
 router.post('/', async (req, res) => {
   try {
-    const { nome, data_criacao, genero_tema } = req.body;
+    const { nome, genero_tema } = req.body;
 
     const novoCanal = await Canal.create({
       nome,
-      data_criacao,
       genero_tema,
     });
 
@@ -66,8 +65,8 @@ router.put('/:id', async (req, res) => {
     const canal = await Canal.findByPk(req.params.id);
     if (!canal) return res.status(404).json({ error: 'Canal não encontrado.' });
 
-    const { nome, data_criacao, genero_tema } = req.body;
-    await canal.update({ nome, data_criacao, genero_tema });
+    const { nome, genero_tema } = req.body;
+    await canal.update({ nome, genero_tema });
 
     res.json(canal);
   } catch (err) {

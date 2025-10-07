@@ -10,13 +10,19 @@ export default (sequelize) => {
     id_playlist: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: { model: 'playlists', key: 'id' },
+      onDelete: 'CASCADE', onUpdate: 'CASCADE',
     },
     id_canal: {
       type: DataTypes.INTEGER,
+      references: { model: 'canais', key: 'id' },
+      onDelete: 'SET NULL', onUpdate: 'CASCADE',
     },
     id_filme: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: { model: 'filmes', key: 'id' },
+      onDelete: 'SET NULL', onUpdate: 'CASCADE',
     },
     assistido: {
       type: DataTypes.BOOLEAN,
@@ -38,7 +44,12 @@ export default (sequelize) => {
     },
   }, {
     tableName: 'playlist_filmes',
-    timestamps: false,
+    timestamps: true,
+    indexes: [
+    { unique: true, fields: ['id_playlist', 'id_filme'] },
+    { fields: ['id_playlist'] },
+    { fields: ['id_filme'] },
+  ]
   });
 
   return PlaylistFilme;

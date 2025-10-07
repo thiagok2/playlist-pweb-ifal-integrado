@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
     const playlists = await Playlist.findAll({
       where,
       include: [{ model: Usuario, attributes: ['id', 'nome'] }],
-      order: [['data_criacao', 'DESC']],
+      order: [['created_at', 'DESC']],
     });
 
     res.json(playlists);
@@ -76,8 +76,7 @@ router.post('/', async (req, res) => {
   try {
     const playlist = await Playlist.create({
       id_usuario,
-      nome,
-      data_criacao: new Date(),
+      nome
     });
 
     res.status(201).json(playlist);

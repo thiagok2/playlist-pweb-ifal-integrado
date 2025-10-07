@@ -14,6 +14,8 @@ export default (sequelize) =>
         model: 'usuarios',
         key: 'id',
       },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
     },
     valor: {
       type: DataTypes.DECIMAL(10, 2),
@@ -51,5 +53,10 @@ export default (sequelize) =>
     },
   }, {
     tableName: 'mensalidades',
-    timestamps: false,
+    timestamps: true,
+    indexes: [
+      { unique: true, fields: ['id_usuario', 'ano_mes'] },
+      { fields: ['id_usuario'] },
+      { fields: ['ano_mes'] },
+    ]
   });

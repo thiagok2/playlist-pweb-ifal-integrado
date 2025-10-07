@@ -17,6 +17,7 @@ describe('Usuario Model', () => {
     await db.Usuario.create({
       login: 'duplicado',
       nome: 'Usuário 1',
+      senha: '123456'
     });
 
     try {
